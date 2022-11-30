@@ -26,7 +26,7 @@ $(document).ready(function() {
   });
 
 
-var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM']
+var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM']
 var calendarContainer = $("#calendar-container")
 var eventTextarea = []
 var submitButton
@@ -34,6 +34,10 @@ var html
 var hour = []
 var timeId = []
 
+
+
+
+ 
 // create a loop that will start at 9am and end at 5pm to display the hour blocks
 $.each(times, function(i, time) {
   html = `
@@ -49,6 +53,7 @@ $.each(times, function(i, time) {
   // hold the time and current index in variables
   hour.push(time)
   timeId.push(i)
+  console.log(time)
 
   
   // place the time slot into the dom
@@ -57,7 +62,30 @@ $.each(times, function(i, time) {
   // if hour slot is equal to time prior to current time, add css class 'past'
   // if hour slot is equal to current time hour, add css class 'present'
   // if hour slot is equal to time after current time, add class 'future'
-  
+  console.log(calendarContainer.children('div').eq(i))
+  // convert 24 hour clock to 12 clock and push those to an array
+  var currentTimeTwentyFour = dayjs().hour()
+  var currentTimeTwelve = dayjs().hour() % 12
+  console.log(currentTimeTwentyFour)
+  var suffix = currentTimeTwentyFour >= 12 ? "PM":"AM";
+  console.log(suffix)
+
+  console.log(dayjs().hour())
+
+  if (time.length === 3) {
+    console.log(time.charAt(0))
+
+    if(currentTimeTwelve === dayjs().hour() % 12) {
+      // get the div with id of hour- current time and suffix to match the array items
+      $(calendarContainer.children(`div[id="hour-${currentTimeTwelve}${suffix}"]`)).addClass('present')
+    }
+
+  } else if (time.length === 4) {
+    console.log(time.slice(0,2))
+  }
+  // if(dayjs().hour() == ) {
+
+  // }
   
 })
 
@@ -75,7 +103,9 @@ submitButton.on('click', function(e) {
     localStorage.setItem($(this).parent().attr('id'), $(this).prev().val())
 
     // get the time and text content from local storage and show in textarea
-    
+    var storedHour = localStorage.getItem($(this).parent().attr('id'))
+    console.log(storedHour)
+    $(this).prev().html(storedHour)
 })
 // when I click on the submit button
 
