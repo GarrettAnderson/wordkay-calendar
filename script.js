@@ -28,31 +28,56 @@ $(document).ready(function() {
 
 var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM']
 var calendarContainer = $("#calendar-container")
+var eventTextarea = []
+var submitButton
+var html
+var hour = []
+var timeId = []
+
 // create a loop that will start at 9am and end at 5pm to display the hour blocks
-var hour
-var timeId
 $.each(times, function(i, time) {
-  var html = `
-  <div id="hour-${time}" class="row time-block past">
-  <div class="col-2 col-md-1 hour text-center py-3">${time}</div>
-  <textarea class="col-8 col-md-10 description" rows="3"> </textarea>
-  <button class="btn saveBtn col-2 col-md-1" aria-label="save">
-    <i class="fas fa-save" aria-hidden="true"></i>
-  </button>
-</div>
+  html = `
+    <div id="hour-${time}" class="row time-block past">
+      <div class="col-2 col-md-1 hour text-center py-3">${time}</div>
+      <textarea class="col-8 col-md-10 description" rows="3"> </textarea>
+      <button class="btn saveBtn col-2 col-md-1" aria-label="save">
+        <i class="fas fa-save" aria-hidden="true"></i>
+      </button>
+    </div>
   `
 
   // hold the time and current index in variables
-  hour = time
-  timeId = i
+  hour.push(time)
+  timeId.push(i)
 
+  
   // place the time slot into the dom
   calendarContainer.append(html)
-
+  
   // if hour slot is equal to time prior to current time, add css class 'past'
   // if hour slot is equal to current time hour, add css class 'present'
   // if hour slot is equal to time after current time, add class 'future'
-
+  
+  
 })
+
+eventTextarea.push($("textarea").val())
+submitButton = $("button")
+console.log(submitButton)
+
+submitButton.on('click', function(e) {
+    // get the value of the parent id
+    console.log($(this).parent().attr('id'))
+    //get the value of the textarea
+    console.log($(this).prev().val())
+
+    // set the time and text content to local storage
+    localStorage.setItem($(this).parent().attr('id'), $(this).prev().val())
+
+    // get the time and text content from local storage and show in textarea
+    
+})
+// when I click on the submit button
+
 
 })
