@@ -28,6 +28,7 @@ $(document).ready(function() {
 
 var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM']
 var calendarContainer = $("#calendar-container")
+var currentDay = $("#currentDay")
 // var eventTextarea = []
 var timeHour
 var currentTimeTwentyFour 
@@ -136,10 +137,20 @@ submitButton.on('click', function(e) {
     // get the time and text content from local storage and show in textarea
     storedHour = localStorage.getItem($(this).parent().attr('id'))
     console.log(storedHour)
-    $(this).prev().val(localStorage.getItem($(this).parent().attr('id')))
+    $(this).prev().val(storedHour)
 
     // when submit button is clicked, show message that item is stored in localStorage
     // set a timer for message to fadeout after a couple seconds
+
+    var localStorageMessage =   `
+      <p id="appointment-added-message">Appointment added to LocalStorage</p>
+    `
+    console.log(localStorageMessage)
+    currentDay.append(localStorageMessage)
+
+    setTimeout(function() {
+      $("#appointment-added-message").fadeOut('fast')
+    }, 3000)
 })
 
 // on page reload, get text from localStorage and 
