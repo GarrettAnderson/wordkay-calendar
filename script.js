@@ -33,8 +33,10 @@ var timeHour
 var currentTimeTwentyFour 
 var currentTimeTwelve
 var submitButton
+var currentSubmitButton
 var suffix = 0
 var html
+var storedHour
 var hour = []
 var hoursInDay = []
 var timeId = []
@@ -54,7 +56,7 @@ var convertHours = function() {
 
 // get the times of the workday via 24 hour clock
   for(var i = 0; i < 24; i++) {
-    if(i >= 9 && i  <= 21) {
+    if(i >= 9 && i  <= 22) {
       hoursInDay.push((i))
     }
   }
@@ -62,7 +64,6 @@ var convertHours = function() {
 }
 
 convertHours()
-
 
  
 // create a loop that will start at 9am and end at 5pm to display the hour blocks
@@ -73,7 +74,7 @@ $.each(hoursInDay, function(i, time) {
   suffix = time >= 12 ? "PM":"AM";
 
   html = `
-    <div id="hour-${time}" class="row time-block past">
+    <div id="hour-${time}" class="row time-block">
       <div class="col-2 col-md-1 hour text-center py-3">${timeTwelve}${suffix}</div>
       <textarea class="col-8 col-md-10 description" rows="3"> </textarea>
       <button class="btn saveBtn col-2 col-md-1" aria-label="save">
@@ -84,46 +85,46 @@ $.each(hoursInDay, function(i, time) {
   // place the time slot into the dom
   calendarContainer.append(html)
   
-  // if hour slot is equal to time prior than current time, add css class 'past'
-  // if hour slot is equal to current time hour, add css class 'present'
-  // if hour slot is equal to time after current time, add class 'future'
   console.log(calendarContainer.children('div').eq(i))
   // currentTimeTwentyFour = dayjs().hour()
   // currentTimeTwelve = dayjs().hour() % 12
   // console.log(currentTimeTwentyFour)
   // suffix = currentTimeTwentyFour >= 12 ? "PM":"AM";
   // console.log(suffix)
-
-
+  
+  
   // if (time.length === 3) {
-  //   console.log(time.charAt(0))
-  //   timeHour = time.charAt(0)
-  // } else if (time.length === 4) {
-  //   console.log(time.slice(0,2))
-  //   timeHour = time.slice(0,2)
-  // }
-  console.log(time) 
-
-
+    //   console.log(time.charAt(0))
+    //   timeHour = time.charAt(0)
+    // } else if (time.length === 4) {
+      //   console.log(time.slice(0,2))
+      //   timeHour = time.slice(0,2)
+      // }
+      console.log(time) 
+      
+      
+  // if hour slot is equal to time prior than current time, add css class 'past'
+  // if hour slot is equal to current time hour, add css class 'present'
+  // if hour slot is equal to time after current time, add class 'future'
   if(time === dayjs().hour()) {
     // get the div with id of hour- current time and suffix to match the array items
     $(calendarContainer.children(`div[id="hour-${time}"]`)).addClass('present')
   } else if (time > dayjs().hour()) {
-    $(calendarContainer.children(`div[id="hour-${timeTwelve}"]`)).addClass('future')
+    $(calendarContainer.children(`div[id="hour-${time}"]`)).addClass('future')
+  } else {
+    $(calendarContainer.children(`div[id="hour-${time}"]`)).addClass('past')
   }
 
-
-  // if(dayjs().hour() == ) {
-
-  // }
   
 })
 
-// eventTextarea.push($("textarea").val())
-submitButton = $("button")
-console.log(submitButton)
+// get the submit button after the html is loaded to the dom
+submitButton = $('button')
 
+// when I click on the submit button add textarea content to localStorage
 submitButton.on('click', function(e) {
+   currentSubmitButton = $(this)
+   console.log(currentSubmitButton)
     // get the value of the parent id
     console.log($(this).parent().attr('id'))
     //get the value of the textarea
@@ -133,11 +134,18 @@ submitButton.on('click', function(e) {
     localStorage.setItem($(this).parent().attr('id'), $(this).prev().val())
 
     // get the time and text content from local storage and show in textarea
-    var storedHour = localStorage.getItem($(this).parent().attr('id'))
+    storedHour = localStorage.getItem($(this).parent().attr('id'))
     console.log(storedHour)
-    $(this).prev().html(storedHour)
-})
-// when I click on the submit button
+    $(this).prev().val(localStorage.getItem($(this).parent().attr('id')))
 
+    // when submit button is clicked, show message that item is stored in localStorage
+    // set a timer for message to fadeout after a couple seconds
+})
+
+// on page reload, get text from localStorage and 
+//  $(window).on('load', function() {
+//     console.log(storedHour)
+//     currentSubmitButton.prev().text(storedHour)
+//  })
 
 })
