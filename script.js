@@ -26,9 +26,9 @@ $(document).ready(function() {
   });
 
 
-var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM']
+var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM']
 var calendarContainer = $("#calendar-container")
-var eventTextarea = []
+// var eventTextarea = []
 var submitButton
 var html
 var hour = []
@@ -74,22 +74,28 @@ $.each(times, function(i, time) {
 
   if (time.length === 3) {
     console.log(time.charAt(0))
-
-    if(currentTimeTwelve === dayjs().hour() % 12) {
-      // get the div with id of hour- current time and suffix to match the array items
-      $(calendarContainer.children(`div[id="hour-${currentTimeTwelve}${suffix}"]`)).addClass('present')
-    }
-
+    var timeHour = time.charAt(0)
   } else if (time.length === 4) {
     console.log(time.slice(0,2))
+    timeHour = time.slice(0,2)
   }
+
+
+  if(currentTimeTwentyFour === dayjs().hour()) {
+    // get the div with id of hour- current time and suffix to match the array items
+    $(calendarContainer.children(`div[id="hour-${currentTimeTwelve}${suffix}"]`)).addClass('present')
+  } else if ((timeHour + 12) > dayjs().hour()) {
+    $(calendarContainer.children(`div[id="hour-${timeHour}${suffix}"]`)).addClass('future')
+  }
+
+
   // if(dayjs().hour() == ) {
 
   // }
   
 })
 
-eventTextarea.push($("textarea").val())
+// eventTextarea.push($("textarea").val())
 submitButton = $("button")
 console.log(submitButton)
 
