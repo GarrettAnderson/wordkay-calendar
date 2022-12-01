@@ -30,24 +30,33 @@ var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '
 var calendarContainer = $("#calendar-container")
 // var eventTextarea = []
 var timeHour
+var currentTimeTwentyFour 
+var currentTimeTwelve
 var submitButton
+var suffix = 0
 var html
 var hour = []
 var hoursInDay = []
 var timeId = []
 
+// convert 24 hour clock to 12 clock and push those to an array
 var convertHours = function() {
-  var currentTimeTwentyFour = dayjs().hour()
-  var currentTimeTwelve = dayjs().hour() % 12
+  currentTimeTwentyFour = dayjs().hour()
+  currentTimeTwelve = dayjs().hour() % 12
   console.log(currentTimeTwentyFour)
-  var suffix = currentTimeTwentyFour >= 12 ? "PM":"AM";
+  suffix = currentTimeTwentyFour >= 12 ? "PM":"AM";
   console.log(suffix)
 
+  // get the hours for 12 hour clock
   var hours = (currentTimeTwentyFour % 12) || 12
   console.log(hours)
 
+
+// get the times of the workday via 24 hour clock
   for(var i = 0; i < 24; i++) {
-    hoursInDay.push(i)
+    if(i >= 9 && i  <= 21) {
+      hoursInDay.push((i))
+    }
   }
   console.log(hoursInDay)
 }
@@ -57,23 +66,21 @@ convertHours()
 
  
 // create a loop that will start at 9am and end at 5pm to display the hour blocks
-$.each(times, function(i, time) {
+$.each(hoursInDay, function(i, time) {
+
+  // convert time from 24 hour to 12 hour clock
+  var timeTwelve = (time % 12) || 12
+  suffix = time >= 12 ? "PM":"AM";
+
   html = `
-    <div id="hour-${time}" class="row time-block past">
-      <div class="col-2 col-md-1 hour text-center py-3">${time}</div>
+    <div id="hour-${timeTwelve}" class="row time-block past">
+      <div class="col-2 col-md-1 hour text-center py-3">${timeTwelve}${suffix}</div>
       <textarea class="col-8 col-md-10 description" rows="3"> </textarea>
       <button class="btn saveBtn col-2 col-md-1" aria-label="save">
         <i class="fas fa-save" aria-hidden="true"></i>
       </button>
     </div>
-  `
-
-  // hold the time and current index in variables
-  hour.push(time)
-  timeId.push(i)
-  console.log(time)
-
-  
+  `  
   // place the time slot into the dom
   calendarContainer.append(html)
   
@@ -81,30 +88,27 @@ $.each(times, function(i, time) {
   // if hour slot is equal to current time hour, add css class 'present'
   // if hour slot is equal to time after current time, add class 'future'
   console.log(calendarContainer.children('div').eq(i))
-  // convert 24 hour clock to 12 clock and push those to an array
-  var currentTimeTwentyFour = dayjs().hour()
-  var currentTimeTwelve = dayjs().hour() % 12
-  console.log(currentTimeTwentyFour)
-  var suffix = currentTimeTwentyFour >= 12 ? "PM":"AM";
-  console.log(suffix)
-
-  console.log(dayjs().hour())
-
-  if (time.length === 3) {
-    console.log(time.charAt(0))
-    timeHour = time.charAt(0)
-  } else if (time.length === 4) {
-    console.log(time.slice(0,2))
-    timeHour = time.slice(0,2)
-  }
-  console.log(timeHour)
+  // currentTimeTwentyFour = dayjs().hour()
+  // currentTimeTwelve = dayjs().hour() % 12
+  // console.log(currentTimeTwentyFour)
+  // suffix = currentTimeTwentyFour >= 12 ? "PM":"AM";
+  // console.log(suffix)
 
 
-  if(currentTimeTwentyFour === dayjs().hour()) {
+  // if (time.length === 3) {
+  //   console.log(time.charAt(0))
+  //   timeHour = time.charAt(0)
+  // } else if (time.length === 4) {
+  //   console.log(time.slice(0,2))
+  //   timeHour = time.slice(0,2)
+  // }
+  console.log(time) 
+  console.log(`div[id="hour-${timeTwelve}${suffix}"]`)
+
+
+  if(time === dayjs().hour()) {
     // get the div with id of hour- current time and suffix to match the array items
-    $(calendarContainer.children(`div[id="hour-${currentTimeTwelve}${suffix}"]`)).addClass('present')
-  } else if ((timeHour + 12) > dayjs().hour()) {
-    $(calendarContainer.children(`div[id="hour-${timeHour}${suffix}"]`)).addClass('future')
+    $(calendarContainer.children(`div[id="hour-${timeTwelve}"]`)).addClass('present')
   }
 
 
