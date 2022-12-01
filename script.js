@@ -29,12 +29,30 @@ $(document).ready(function() {
 var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM']
 var calendarContainer = $("#calendar-container")
 // var eventTextarea = []
+var timeHour
 var submitButton
 var html
 var hour = []
+var hoursInDay = []
 var timeId = []
 
+var convertHours = function() {
+  var currentTimeTwentyFour = dayjs().hour()
+  var currentTimeTwelve = dayjs().hour() % 12
+  console.log(currentTimeTwentyFour)
+  var suffix = currentTimeTwentyFour >= 12 ? "PM":"AM";
+  console.log(suffix)
 
+  var hours = (currentTimeTwentyFour % 12) || 12
+  console.log(hours)
+
+  for(var i = 0; i < 24; i++) {
+    hoursInDay.push(i)
+  }
+  console.log(hoursInDay)
+}
+
+convertHours()
 
 
  
@@ -59,7 +77,7 @@ $.each(times, function(i, time) {
   // place the time slot into the dom
   calendarContainer.append(html)
   
-  // if hour slot is equal to time prior to current time, add css class 'past'
+  // if hour slot is equal to time prior than current time, add css class 'past'
   // if hour slot is equal to current time hour, add css class 'present'
   // if hour slot is equal to time after current time, add class 'future'
   console.log(calendarContainer.children('div').eq(i))
@@ -74,11 +92,12 @@ $.each(times, function(i, time) {
 
   if (time.length === 3) {
     console.log(time.charAt(0))
-    var timeHour = time.charAt(0)
+    timeHour = time.charAt(0)
   } else if (time.length === 4) {
     console.log(time.slice(0,2))
     timeHour = time.slice(0,2)
   }
+  console.log(timeHour)
 
 
   if(currentTimeTwentyFour === dayjs().hour()) {
