@@ -73,7 +73,7 @@ $.each(hoursInDay, function(i, time) {
   suffix = time >= 12 ? "PM":"AM";
 
   html = `
-    <div id="hour-${timeTwelve}" class="row time-block past">
+    <div id="hour-${time}" class="row time-block past">
       <div class="col-2 col-md-1 hour text-center py-3">${timeTwelve}${suffix}</div>
       <textarea class="col-8 col-md-10 description" rows="3"> </textarea>
       <button class="btn saveBtn col-2 col-md-1" aria-label="save">
@@ -103,12 +103,13 @@ $.each(hoursInDay, function(i, time) {
   //   timeHour = time.slice(0,2)
   // }
   console.log(time) 
-  console.log(`div[id="hour-${timeTwelve}${suffix}"]`)
 
 
   if(time === dayjs().hour()) {
     // get the div with id of hour- current time and suffix to match the array items
-    $(calendarContainer.children(`div[id="hour-${timeTwelve}"]`)).addClass('present')
+    $(calendarContainer.children(`div[id="hour-${time}"]`)).addClass('present')
+  } else if (time > dayjs().hour()) {
+    $(calendarContainer.children(`div[id="hour-${timeTwelve}"]`)).addClass('future')
   }
 
 
