@@ -101,7 +101,7 @@ $.each(hoursInDay, function(i, time) {
       //   console.log(time.slice(0,2))
       //   timeHour = time.slice(0,2)
       // }
-      console.log(time) 
+    console.log(time) 
       
       
   // if hour slot is equal to time prior than current time, add css class 'past'
@@ -119,6 +119,8 @@ $.each(hoursInDay, function(i, time) {
   
 })
 
+
+
 // get the submit button after the html is loaded to the dom
 submitButton = $('button')
 
@@ -129,15 +131,15 @@ submitButton.on('click', function(e) {
     // get the value of the parent id
     console.log($(this).parent().attr('id'))
     //get the value of the textarea
-    console.log($(this).prev().val())
+    console.log($(this).prev())
 
     // set the time and text content to local storage
     localStorage.setItem($(this).parent().attr('id'), $(this).prev().val())
 
     // get the time and text content from local storage and show in textarea
-    storedHour = localStorage.getItem($(this).parent().attr('id'))
-    console.log(storedHour)
-    $(this).prev().val(storedHour)
+    // storedHour = localStorage.getItem($(this).parent().attr('id'))
+    // console.log(storedHour)
+    // $(this).prev().val(storedHour)
 
     // when submit button is clicked, show message that item is stored in localStorage
     // set a timer for message to fadeout after a couple seconds
@@ -153,10 +155,23 @@ submitButton.on('click', function(e) {
     }, 3000)
 })
 
-// on page reload, get text from localStorage and 
-//  $(window).on('load', function() {
-//     console.log(storedHour)
-//     currentSubmitButton.prev().text(storedHour)
-//  })
+
+
+// create init function to show local storage in textarea
+// create a loop over the time period to start at 9am to iterate up to 10pm(22) 
+// to then pull specific text data from local storage
+
+var getTextFromLocalStorage = function() {
+  for (var i = 9; i < 23; i++) {
+    // console.log($(`#hour-${i} textarea`))
+    // storedHour = localStorage.getItem($(`#hour-${i}`))
+    storedHour = localStorage.getItem($("#hour-10"))
+    console.log(localStorage.getItem($("#hour-10")))
+  }
+}
+
+// getTextFromLocalStorage() 
+console.log(localStorage.getItem($("hour-10")))
+
 
 })
