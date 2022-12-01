@@ -140,6 +140,7 @@ submitButton.on('click', function(e) {
     // storedHour = localStorage.getItem($(this).parent().attr('id'))
     // console.log(storedHour)
     // $(this).prev().val(storedHour)
+    getTextFromLocalStorage() 
 
     // when submit button is clicked, show message that item is stored in localStorage
     // set a timer for message to fadeout after a couple seconds
@@ -166,12 +167,17 @@ var getTextFromLocalStorage = function() {
     // console.log($(`#hour-${i} textarea`))
     // storedHour = localStorage.getItem($(`#hour-${i}`))
     storedHour = localStorage.getItem($("#hour-10"))
-    console.log(localStorage.getItem($("#hour-10")))
+    console.log(localStorage.getItem(`hour-${i}`))
+    // console.log(localStorage.getItem("hour-10"))
+
+
+    // set condition to handle when localStorage is null
+
+    // set the value of the textarea to localStorage value
   }
 }
 
-// getTextFromLocalStorage() 
-console.log(localStorage.getItem($("hour-10")))
+getTextFromLocalStorage() 
 
 
 })
