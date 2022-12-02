@@ -165,8 +165,9 @@ submitButton.on('click', function(e) {
 var getTextFromLocalStorage = function() {
   for (var i = 9; i < 23; i++) {
     // console.log($(`#hour-${i} textarea`))
+
     // storedHour = localStorage.getItem($(`#hour-${i}`))
-    storedHour = localStorage.getItem($("#hour-10"))
+    storedHour = localStorage.getItem(`hour-${i}`)
     console.log(localStorage.getItem(`hour-${i}`))
     // console.log(localStorage.getItem("hour-10"))
 
@@ -174,6 +175,7 @@ var getTextFromLocalStorage = function() {
     // set condition to handle when localStorage is null
 
     // set the value of the textarea to localStorage value
+    $(`#hour-${i} textarea`).val(localStorage.getItem(`hour-${i}`))
   }
 }
 
