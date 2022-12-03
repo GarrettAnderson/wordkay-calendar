@@ -42,8 +42,14 @@ var hour = []
 var hoursInDay = []
 var timeId = []
 
+
+function getDayOfWeek() {
+  
+}
+
+
 // convert 24 hour clock to 12 clock and push those to an array
-var convertHours = function() {
+function convertHours() {
   currentTimeTwentyFour = dayjs().hour()
   currentTimeTwelve = dayjs().hour() % 12
   console.log(currentTimeTwentyFour)
