@@ -26,6 +26,7 @@ $(document).ready(function() {
   });
 
 
+
 var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM']
 var calendarContainer = $("#calendar-container")
 var currentDay = $("#currentDay")
@@ -35,7 +36,7 @@ var currentTimeTwentyFour
 var currentTimeTwelve
 var submitButton
 var currentSubmitButton
-var suffix = 0
+var suffix
 var html
 var storedHour
 var hour = []
@@ -44,9 +45,26 @@ var timeId = []
 
 
 function getDayOfWeek() {
-  
+  var dayOfWeek = dayjs()
+  console.log(dayOfWeek)
+  var daySuffix
+
+  if (dayOfWeek.format("DD") === "01" || dayOfWeek.format("DD") === "31") {
+    daySuffix = "st"
+  } else if (dayOfWeek.format("DD") === "02") {
+    daySuffix = "nd"
+  } else if (dayOfWeek.format("DD") === "03") {
+    daySuffix = "rd"
+  } else {
+    daySuffix = "th"
+  }
+
+  var formattedDayOfWeek = dayOfWeek.format("dddd, MMMM DD") + daySuffix
+  console.log(formattedDayOfWeek)
+  $("#currentDay").text(formattedDayOfWeek)
 }
 
+getDayOfWeek()
 
 // convert 24 hour clock to 12 clock and push those to an array
 function convertHours() {
