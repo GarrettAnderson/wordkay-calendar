@@ -3,7 +3,7 @@
 // in the html.
 
 $(document).ready(function() {
-  $(function () {
+
     // TODO: Add a listener for click events on the save button. This code should
     // use the id in the containing time-block as a key to save the user input in
     // local storage. HINT: What does `this` reference in the click listener
@@ -23,36 +23,187 @@ $(document).ready(function() {
     // attribute of each time-block be used to do this?
     //
     // TODO: Add code to display the current date in the header of the page.
-  });
 
 
-var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM']
+
+
+var times = ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM']
 var calendarContainer = $("#calendar-container")
+var currentDay = $("#currentDay")
+// var eventTextarea = []
+var timeHour
+var currentTimeTwentyFour 
+var currentTimeTwelve
+var submitButton
+var currentSubmitButton
+var suffix
+var html
+var storedHour
+var hour = []
+var hoursInDay = []
+var timeId = []
+
+
+function getDayOfWeek() {
+  var dayOfWeek = dayjs()
+  console.log(dayOfWeek)
+  var daySuffix
+
+  if (dayOfWeek.format("DD") === "01" || dayOfWeek.format("DD") === "31") {
+    daySuffix = "st"
+  } else if (dayOfWeek.format("DD") === "02") {
+    daySuffix = "nd"
+  } else if (dayOfWeek.format("DD") === "03") {
+    daySuffix = "rd"
+  } else {
+    daySuffix = "th"
+  }
+
+  var formattedDayOfWeek = dayOfWeek.format("dddd, MMMM DD") + daySuffix
+  console.log(formattedDayOfWeek)
+  $("#currentDay").text(formattedDayOfWeek)
+}
+
+getDayOfWeek()
+
+// convert 24 hour clock to 12 clock and push those to an array
+function convertHours() {
+  currentTimeTwentyFour = dayjs().hour()
+  currentTimeTwelve = dayjs().hour() % 12
+  console.log(currentTimeTwentyFour)
+  suffix = currentTimeTwentyFour >= 12 ? "PM":"AM";
+  console.log(suffix)
+
+  // get the hours for 12 hour clock
+  var hours = (currentTimeTwentyFour % 12) || 12
+  console.log(hours)
+
+
+// get the times of the workday via 24 hour clock
+  for(var i = 0; i < 24; i++) {
+    if(i >= 9 && i  <= 22) {
+      hoursInDay.push((i))
+    }
+  }
+  console.log(hoursInDay)
+}
+
+convertHours()
+
+ 
 // create a loop that will start at 9am and end at 5pm to display the hour blocks
-var hour
-var timeId
-$.each(times, function(i, time) {
-  var html = `
-  <div id="hour-${time}" class="row time-block past">
-  <div class="col-2 col-md-1 hour text-center py-3">${time}</div>
-  <textarea class="col-8 col-md-10 description" rows="3"> </textarea>
-  <button class="btn saveBtn col-2 col-md-1" aria-label="save">
-    <i class="fas fa-save" aria-hidden="true"></i>
-  </button>
-</div>
-  `
+$.each(hoursInDay, function(i, time) {
 
-  // hold the time and current index in variables
-  hour = time
-  timeId = i
+  // convert time from 24 hour to 12 hour clock
+  var timeTwelve = (time % 12) || 12
+  suffix = time >= 12 ? "PM":"AM";
 
+  html = `
+    <div id="hour-${time}" class="row time-block">
+      <div class="col-2 col-md-1 hour text-center py-3">${timeTwelve}${suffix}</div>
+      <textarea class="col-8 col-md-10 description" rows="3"> </textarea>
+      <button class="btn saveBtn col-2 col-md-1" aria-label="save">
+        <i class="fas fa-save" aria-hidden="true"></i>
+      </button>
+    </div>
+  `  
   // place the time slot into the dom
   calendarContainer.append(html)
-
-  // if hour slot is equal to time prior to current time, add css class 'past'
+  
+  console.log(calendarContainer.children('div').eq(i))
+  // currentTimeTwentyFour = dayjs().hour()
+  // currentTimeTwelve = dayjs().hour() % 12
+  // console.log(currentTimeTwentyFour)
+  // suffix = currentTimeTwentyFour >= 12 ? "PM":"AM";
+  // console.log(suffix)
+  
+  
+  // if (time.length === 3) {
+    //   console.log(time.charAt(0))
+    //   timeHour = time.charAt(0)
+    // } else if (time.length === 4) {
+      //   console.log(time.slice(0,2))
+      //   timeHour = time.slice(0,2)
+      // }
+    console.log(time) 
+      
+      
+  // if hour slot is equal to time prior than current time, add css class 'past'
   // if hour slot is equal to current time hour, add css class 'present'
   // if hour slot is equal to time after current time, add class 'future'
+  if(time === dayjs().hour()) {
+    // get the div with id of hour- current time and suffix to match the array items
+    $(calendarContainer.children(`div[id="hour-${time}"]`)).addClass('present')
+  } else if (time > dayjs().hour()) {
+    $(calendarContainer.children(`div[id="hour-${time}"]`)).addClass('future')
+  } else {
+    $(calendarContainer.children(`div[id="hour-${time}"]`)).addClass('past')
+  }
 
+  
 })
+
+
+
+// get the submit button after the html is loaded to the dom
+submitButton = $('button')
+
+// when I click on the submit button add textarea content to localStorage
+submitButton.on('click', function(e) {
+   currentSubmitButton = $(this)
+   console.log(currentSubmitButton)
+    // get the value of the parent id
+    console.log($(this).parent().attr('id'))
+    //get the value of the textarea
+    console.log($(this).prev())
+
+    // set the time and text content to local storage
+    localStorage.setItem($(this).parent().attr('id'), $(this).prev().val())
+
+    // get the time and text content from local storage and show in textarea
+    // storedHour = localStorage.getItem($(this).parent().attr('id'))
+    // console.log(storedHour)
+    // $(this).prev().val(storedHour)
+    getTextFromLocalStorage() 
+
+    // when submit button is clicked, show message that item is stored in localStorage
+    // set a timer for message to fadeout after a couple seconds
+
+    var localStorageMessage =   `
+      <p id="appointment-added-message">Appointment added to LocalStorage</p>
+    `
+    console.log(localStorageMessage)
+    currentDay.append(localStorageMessage)
+
+    setTimeout(function() {
+      $("#appointment-added-message").fadeOut('fast')
+    }, 3000)
+})
+
+
+
+// create init function to show local storage in textarea
+// create a loop over the time period to start at 9am to iterate up to 10pm(22) 
+// to then pull specific text data from local storage
+
+var getTextFromLocalStorage = function() {
+  for (var i = 9; i < 23; i++) {
+    // console.log($(`#hour-${i} textarea`))
+
+    // storedHour = localStorage.getItem($(`#hour-${i}`))
+    storedHour = localStorage.getItem(`hour-${i}`)
+    console.log(localStorage.getItem(`hour-${i}`))
+    // console.log(localStorage.getItem("hour-10"))
+
+
+    // set condition to handle when localStorage is null
+
+    // set the value of the textarea to localStorage value
+    $(`#hour-${i} textarea`).val(localStorage.getItem(`hour-${i}`))
+  }
+}
+
+getTextFromLocalStorage() 
+
 
 })
