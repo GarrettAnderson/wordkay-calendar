@@ -1,4 +1,4 @@
-# wordkay-calendar
+# Wordkay-Calendar
 A calendar that allows for setting events per time during one day.
 
 ## Description
